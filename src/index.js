@@ -14,7 +14,6 @@ class ServerlessPlugin {
     };
   }
 
-
   fixApiGatewayDeployment() {
     const template = this.serverless.service.provider.compiledCloudFormationTemplate;
     const log = this.serverless.cli.consoleLog;
