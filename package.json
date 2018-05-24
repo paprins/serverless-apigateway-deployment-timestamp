@@ -1,6 +1,6 @@
 {
   "name": "serverless-apigateway-deployment-timestamp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Serverless plugin that adds a timestamp to any `AWS::ApiGateway::Deployment` resource to enforce the API to deploy.",
   "main": "src/index.js",
   "scripts": {

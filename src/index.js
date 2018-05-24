@@ -9,14 +9,17 @@ class ServerlessPlugin {
     this.serverless = serverless;
     this.options = options;
 
+    // Using `after:` because we also want to process the custom resources mentioned in the `serverless.yml`
     this.hooks = {
-      'before:aws:package:finalize:mergeCustomProviderResources': this.fixApiGatewayDeployment.bind(this),
+      'after:aws:package:finalize:mergeCustomProviderResources': this.fixApiGatewayDeployment.bind(this),
     };
   }
 
   fixApiGatewayDeployment() {
     const template = this.serverless.service.provider.compiledCloudFormationTemplate;
     const log = this.serverless.cli.consoleLog;
+
+    log("About to process all resources of type 'AWS::ApiGateway::Deployment' ...");
 
     // Find the deployment resource in CloudFormation template
     const gatewayDeployResources = Object.keys(template.Resources).filter(id => template.Resources[id].Type === 'AWS::ApiGateway::Deployment');
@@ -32,6 +35,8 @@ class ServerlessPlugin {
         template.Resources[newResourceId] = template.Resources[resourceId];
         // Remove old resource (without timestamp)
         delete template.Resources[resourceId];
+      } else {
+        log(`Resource '${resourceId}' already contains timestamp.`);
       }
     }
   }
